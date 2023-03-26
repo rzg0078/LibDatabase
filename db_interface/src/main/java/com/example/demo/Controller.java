@@ -69,7 +69,7 @@ public class Controller
             }
             return responseList;
         } catch (Exception e) {
-            return new ArrayList<>();
+            return  new ArrayList<>();
         }
     }
   //This is to upload CSV file
@@ -80,8 +80,6 @@ public class Controller
             boolean flag = false;
             String fileName = file.getOriginalFilename();
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
-            System.out.println("------------");
-            System.out.println(fileName);
             String[] fileNameSplit = fileName.split("_");    
             // file name format only works for format "Semester_SubPart_year"
             
@@ -97,7 +95,6 @@ public class Controller
             {
                 String tableName = fileNameSplit[0].toLowerCase() + fileNameConnector + (fileNameSplit[1].toLowerCase().equals("micro") ? "microfilm" : fileNameSplit[1].toLowerCase()) +
                 "_" + fileNameSplit[2];
-                System.out.println(fileName);
                 List<String[]> rows = new ArrayList<>();
                 Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
                 CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
@@ -140,7 +137,7 @@ public class Controller
                         for (String[] row : rows) {
                             String query = "INSERT INTO " + tableName + " (PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes) "
                                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                            System.out.println("SQL Query: " + query);
+                            //System.out.println("SQL Query: " + query);
                             Query q = entityManager.createNativeQuery(query);
                             q.setParameter(1, row[0]);
                             q.setParameter(2, Integer.parseInt(row[1]));
