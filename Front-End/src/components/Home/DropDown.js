@@ -34,7 +34,7 @@ function DropDown(props) {
         getLanguage={props.getLanguage}
       />
       <InnerDropDown
-        subName="No Call"
+        subName="NoCall"
         setCategory={props.setCategory}
         setYear={props.setYear}
         getLanguage={props.getLanguage}

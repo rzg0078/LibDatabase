@@ -170,7 +170,7 @@ public class Controller
             }
             else
             {
-                throw new Exception("Please check filename it should be in format Semester_SubPart_Year"));
+                throw new Exception("Please check filename it should be in format Semester_SubPart_Year");
             }               
             } catch (Exception e) 
             {
