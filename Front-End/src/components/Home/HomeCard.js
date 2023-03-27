@@ -48,6 +48,7 @@ function HomeCard() {
   };
 
   const uploadFile = (file) => {
+    if(file!==undefined){
     const formData = new FormData();
     formData.append("file", file);
     fetch("http://localhost:8080/uploadData", {
@@ -58,7 +59,10 @@ function HomeCard() {
       .then((responseJson) => {
         setFileResponse(responseJson);
       })
-      .catch();
+      .catch();}
+      else{
+        setFileResponse("Please Select Appropriate File");
+      }
   };
 
   return (
@@ -67,7 +71,7 @@ function HomeCard() {
         <Card.Body>
           <div className="top-padding"></div>
           <div className="row">
-            <div className="col-6 shift-left divs">
+            <div className="col-8 shift-left divs">
               <DropDown
                 name="Fall Semester"
                 shortName="Fall"
@@ -96,7 +100,7 @@ function HomeCard() {
                 getLanguage={getLanguage}
               />
             </div>
-            <div className="col-6 shift-right">
+            <div className="col-4 shift-right">
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Control
                   type="file"
