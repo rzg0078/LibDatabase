@@ -1,0 +1,12 @@
+html {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+html body {
+  padding: 0;
+  margin: 0;
+  overflow-y: inherit;
+  overflow-x: inherit;
+  background-color: rgba(26, 166, 183, 0.5);
+}

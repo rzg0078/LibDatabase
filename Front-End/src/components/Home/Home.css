@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&family=Raleway:wght@600&family=Urbanist:wght@900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400&family=Lilita+One&family=Raleway:wght@600&family=Urbanist:wght@500&display=swap");
+
+.top-padding {
+  padding-top: 2%;
+}
+
+.p-file {
+  font-size: 18px;
+  font-weight: 500;
+  color: #002d40;
+  font-family: "Urbanist", sans-serif;
+}
+
+.card-width {
+  width: 90%;
+  height: 90vh;
+  margin: auto;
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  box-shadow: 5px 5px rgba(128, 128, 128, 0.8);
+}
+
+.drop-main {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  margin-right: 100%;
+  padding-left: 2%;
+}
+
+.form-btn-main {
+  width: 70%;
+}
+
+.form-control,
+.button-in,
+.drop-main > .btn {
+  border: unset;
+  border-radius: 30px;
+  padding: 1% 5%;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  background-color: #002d40;
+  font-family: "Urbanist", sans-serif;
+}
+
+.d-grid > .btn {
+  border: unset;
+  border-radius: 30px;
+  padding: 5%;
+  margin: 2%;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  background-color: #002d40;
+  font-family: "Urbanist", sans-serif;
+}
+
+.table-change {
+  margin: 0 2%;
+  max-height: 575px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  border-radius: 30px;
+  margin: 3% 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  background-color: #002d40;
+}
+
+.divs {
+  margin-bottom: 2%;
+}
+
+.shift-left {
+  text-align: left;
+  padding-left: 2%;
+}
+
+.shift-right {
+  text-align: right;
+  padding-right: 2%;
+}
+
+.inline-button {
+  display: inline;
+}
+
+.padding-main {
+  padding-top: 3%;
+}
+
+thead > tr:first-child,
+tr:nth-child(even) {
+  background-color: rgba(255, 65, 77, 0.4);
+  border: 1px solid black;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: "Urbanist", sans-serif;
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(26, 166, 183, 0.5);
+  border: 1px solid black;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: "Urbanist", sans-serif;
+}
+.marg-top {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
