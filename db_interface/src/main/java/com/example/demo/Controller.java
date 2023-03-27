@@ -166,11 +166,11 @@ public class Controller
                     }
         
                 });
-                return ResponseEntity.ok("Data uploaded successfully");    
+                return ResponseEntity.ok("Data Uploaded Successfully");    
             }
             else
             {
-                throw new Exception("pleae check file name it should be in format Semester_SubPart_year");
+                throw new Exception("Please check filename it should be in format Semester_SubPart_Year"));
             }               
             } catch (Exception e) 
             {
