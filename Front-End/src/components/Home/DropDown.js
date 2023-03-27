@@ -13,7 +13,6 @@ function DropDown(props) {
       id="dropdown-basic-button"
       title={props.name}
       className="drop-main inline-button"
-      drop="end"
       onClick={addSemester}
     >
       <InnerDropDown

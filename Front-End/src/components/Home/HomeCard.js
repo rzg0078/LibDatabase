@@ -77,6 +77,24 @@ function HomeCard() {
                 year={year}
                 getLanguage={getLanguage}
               />
+              <DropDown
+                name="Spring Semester"
+                shortName="Spring"
+                setSemester={setSemester}
+                setCategory={setCategory}
+                setYear={setYear}
+                year={year}
+                getLanguage={getLanguage}
+              />
+              <DropDown
+                name="Summer Semester"
+                shortName="Summer"
+                setSemester={setSemester}
+                setCategory={setCategory}
+                setYear={setYear}
+                year={year}
+                getLanguage={getLanguage}
+              />
             </div>
             <div className="col-6 shift-right">
               <Form.Group controlId="formFile" className="mb-3">
@@ -89,32 +107,6 @@ function HomeCard() {
                 />
               </Form.Group>
               <p className="p-file">{fileResponse}</p>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-6 shift-left divs">
-              <DropDown
-                name="Spring Semester"
-                shortName="Spring"
-                setSemester={setSemester}
-                setCategory={setCategory}
-                setYear={setYear}
-                year={year}
-                getLanguage={getLanguage}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-6 shift-left divs">
-              <DropDown
-                name="Summer Semester"
-                shortName="Summer"
-                setSemester={setSemester}
-                setCategory={setCategory}
-                setYear={setYear}
-                year={year}
-                getLanguage={getLanguage}
-              />
             </div>
           </div>
           <div className="padding-main"></div>
