@@ -1,0 +1,18 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\db_interface",
+    "\\db_interface\\src",
+    "\\db_interface\\src\\main",
+    "\\db_interface\\src\\main\\java",
+    "\\db_interface\\src\\main\\java\\com",
+    "\\db_interface\\src\\main\\java\\com\\example",
+    "\\db_interface\\src\\main\\java\\com\\example\\demo",
+    "\\Front-End",
+    "\\Front-End\\public",
+    "\\Front-End\\src",
+    "\\Front-End\\src\\components",
+    "\\Front-End\\src\\components\\Home"
+  ],
+  "PreviewInSolutionExplorer": false
+}

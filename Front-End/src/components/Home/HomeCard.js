@@ -12,7 +12,7 @@ function HomeCard() {
   const [fileResponse, setFileResponse] = useState("");
   const [json, setJson] = useState(0);
   const header = [
-    "Patron Group Name",
+    "Patron Group Display",
     "Count Of Charge Date Only",
     "Count Of Renewal Count",
     "Start Date",

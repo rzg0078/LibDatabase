@@ -27,31 +27,34 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import jakarta.persistence.*;
 
-
 @CrossOrigin
 @RestController
 
-
-public class Controller
-{
+public class Controller {
     @Autowired
     private EntityManager entityManager;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
-    //if you want to include any file name possibilities do it here
+    // if you want to include any file name possibilities do it here
     public String fileNameConnector = "_circ_stats_";
-    public ArrayList<String> semesters = new ArrayList<>(Arrays.asList("fall", "spring" , "summer"));
-    public ArrayList<String> subParts = new ArrayList<>(Arrays.asList("microfilm", "miscellaneous" , "traditional","nocall","micro"));
-    public ArrayList<Integer> years = new ArrayList<>(Arrays.asList(2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021));
-    //This is data retrival it is a get request only but given postmapping in order to accomidate request body from Front End
-    @PostMapping(path="/getData")
+    public ArrayList<String> semesters = new ArrayList<>(Arrays.asList("fall", "spring", "summer"));
+    public ArrayList<String> subParts = new ArrayList<>(
+            Arrays.asList("microfilm", "miscellaneous", "traditional", "nocall", "micro"));
+    public ArrayList<Integer> years = new ArrayList<>(
+            Arrays.asList(2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021));
+
+    // This is data retrival it is a get request only but given postmapping in order
+    // to accomidate request body from Front End
+    @PostMapping(path = "/getData")
     @SuppressWarnings("unchecked")
-    public List<Map<String,Object>> getTable(@RequestBody RequestJson requestJson) {
+    public List<Map<String, Object>> getTable(@RequestBody RequestJson requestJson) {
         try {
-            String tableName = requestJson.getSemester() +"_circ_stats_" + requestJson.getSubParts() + "_" + requestJson.getYear();
-            String query = "SELECT  PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes FROM " + tableName;
-            List<Object[]> results = entityManager.createNativeQuery(query).getResultList();    
+            String tableName = requestJson.getSemester() + fileNameConnector + requestJson.getSubParts() + "_"
+                    + requestJson.getYear();
+            String query = "SELECT  PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes FROM "
+                    + tableName;
+            List<Object[]> results = entityManager.createNativeQuery(query).getResultList();
             List<Map<String, Object>> responseList = new ArrayList<>();
             for (Object[] row : results) {
                 Map<String, Object> responseMap = new HashMap<>();
@@ -69,10 +72,11 @@ public class Controller
             }
             return responseList;
         } catch (Exception e) {
-            return  new ArrayList<>();
+            return new ArrayList<>();
         }
     }
-  //This is to upload CSV file
+
+    // This is to upload CSV file
     @PostMapping(path = "/uploadData")
     @SuppressWarnings("unchecked")
     public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) {
@@ -80,21 +84,22 @@ public class Controller
             boolean flag = false;
             String fileName = file.getOriginalFilename();
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
-            String[] fileNameSplit = fileName.split("_");    
+            String[] fileNameSplit = fileName.split("_");
             // file name format only works for format "Semester_SubPart_year"
-            
-            if(fileNameSplit.length == 3)
-            {
-                if(semesters.contains(fileNameSplit[0].toLowerCase()) && subParts.contains(fileNameSplit[1].toLowerCase())
-                && years.contains(Integer.parseInt(fileNameSplit[2])))
-                {
+
+            if (fileNameSplit.length == 3) {
+                if (semesters.contains(fileNameSplit[0].toLowerCase())
+                        && subParts.contains(fileNameSplit[1].toLowerCase())
+                        && years.contains(Integer.parseInt(fileNameSplit[2]))) {
                     flag = true;
                 }
             }
-            if(flag)
-            {
-                String tableName = fileNameSplit[0].toLowerCase() + fileNameConnector + (fileNameSplit[1].toLowerCase().equals("micro") ? "microfilm" : fileNameSplit[1].toLowerCase()) +
-                "_" + fileNameSplit[2];
+            if (flag) {
+                String tableName = fileNameSplit[0].toLowerCase() + fileNameConnector
+                        + (fileNameSplit[1].toLowerCase().equals("micro") ? "microfilm"
+                                : fileNameSplit[1].toLowerCase())
+                        +
+                        "_" + fileNameSplit[2];
                 List<String[]> rows = new ArrayList<>();
                 Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
                 CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
@@ -130,18 +135,53 @@ public class Controller
                             Query createTable = entityManager.createNativeQuery(createTableQuery);
                             createTable.executeUpdate();
                         }
-                        //If any date format errors check here
+                        // If any date format errors check here
                         SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
                         SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
                         SimpleDateFormat dateFormat3 = new SimpleDateFormat("dd/MM/yyyy");
                         for (String[] row : rows) {
-                            String query = "INSERT INTO " + tableName + " (PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes) "
+                            String publisher = row[8];
+                            if (row.length == 11) {
+                                publisher = "publisher 1 : " + row[8] + "publisher 2 : " + row[9];
+                                String query = "INSERT INTO " + tableName
+                                        + " (PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes) "
+                                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                // System.out.println("SQL Query: " + query);
+                                Query q = entityManager.createNativeQuery(query);
+                                q.setParameter(1, row[0]);
+                                q.setParameter(2, isNumeric(row[1]) ? Integer.parseInt(row[1]) : null);
+                                q.setParameter(3, isNumeric(row[2]) ? Integer.parseInt(row[2]) : null);
+                                Date startDate = null;
+                                Date endDate = null;
+                                for (SimpleDateFormat dateFormat : Arrays.asList(dateFormat1, dateFormat2,
+                                        dateFormat3)) {
+                                    try {
+                                        startDate = dateFormat.parse(row[3]);
+                                        endDate = dateFormat.parse(row[4]);
+                                        break;
+                                    } catch (ParseException e) {
+                                        // Ignoring the exception and trying the next date format
+                                    }
+                                }
+                                q.setParameter(4, startDate);
+                                q.setParameter(5, endDate);
+                                q.setParameter(6, row[5]);
+                                q.setParameter(7, row[6]);
+                                q.setParameter(8, row[7]);
+                                q.setParameter(9, publisher);
+                                q.setParameter(10, row[10]);
+
+                                q.executeUpdate();
+                            }
+
+                            String query = "INSERT INTO " + tableName
+                                    + " (PATRON_GROUP_NAME, CountOfCHARGE_DATE_ONLY, CountOfRENEWAL_COUNT, StartDate, EndDate, TITLE, CALL_NO, AUTHOR, PUBLISHER, Circulation_Notes) "
                                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                            //System.out.println("SQL Query: " + query);
+                            // System.out.println("SQL Query: " + query);
                             Query q = entityManager.createNativeQuery(query);
                             q.setParameter(1, row[0]);
-                            q.setParameter(2, Integer.parseInt(row[1]));
-                            q.setParameter(3, Integer.parseInt(row[2]));
+                            q.setParameter(2, isNumeric(row[1]) ? Integer.parseInt(row[1]) : null);
+                            q.setParameter(3, isNumeric(row[2]) ? Integer.parseInt(row[2]) : null);
                             Date startDate = null;
                             Date endDate = null;
                             for (SimpleDateFormat dateFormat : Arrays.asList(dateFormat1, dateFormat2, dateFormat3)) {
@@ -160,23 +200,32 @@ public class Controller
                             q.setParameter(8, row[7]);
                             q.setParameter(9, row[8]);
                             q.setParameter(10, row[9]);
-        
+
                             q.executeUpdate();
                         }
                     }
-        
+
                 });
-                return ResponseEntity.ok("Data Uploaded Successfully");    
+                return ResponseEntity.ok("Data uploaded successfully");
+            } else {
+                throw new Exception("pleae check file name it should be in format Semester_SubPart_year");
             }
-            else
-            {
-                throw new Exception("Please check filename it should be in format Semester_SubPart_Year");
-            }               
-            } catch (Exception e) 
-            {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading data: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading data: " + e.getMessage());
         }
     }
-     
-   
+
+    public static boolean isNumeric(String str) {
+        if (str == null || str.isEmpty() || str == " ") {
+            return false;
+        }
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
